@@ -34,6 +34,8 @@ jobs:
               const user = await github.rest.users.getByUsername({
                 username: context.payload.issue.user.login
               })
+
+              core.info(JSON.stringify(user, null, 2))
               const membership = await github.rest.orgs.getMembershipForUser({
                 org: context.repo.owner,
                 username: user.data.id
