@@ -1,0 +1,34 @@
+// create a github workflow that will run upon a new issue being lableled with "add-me"
+// the workflow should add the creator of the issue as a member of the organization
+
+name: Add me to the organization
+
+on:
+  issues:
+    types: 
+      - labeled
+      - edited
+
+jobs:
+  add-me:
+    runs-on: ubuntu-latest
+    steps:
+      // if the issue is not labeled with "add-me" then mark the workflow as successful and exit
+
+      - name: Skip if not labeled
+        if: ${{ !contains(github.event.issue.labels.*.name, 'add-me') }}
+        run: |
+          echo "Issue is not labeled with 'add-me', skipping"
+          exit 0
+
+      - name: Add me to the organization
+        uses: actions/github-script@v3
+        with:
+          github-token: ${{ secrets.ONEGHEORG_ADMIN_TOKEN }}
+          script: |
+            github.orgs.addOrUpdateMembershipForUser({
+              org: context.repo.owner,
+              username: context.payload.issue.user.login,
+              role: 'member'
+            })
+      
