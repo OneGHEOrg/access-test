@@ -25,7 +25,7 @@ jobs:
       # if they are, then mark the workflow as successful and exit
 
       - name: Check if user is already a member
-        uses: actions/github-script@v3
+        uses: actions/github-script@v6
         with:
           github-token: ${{ secrets.ONEGHEORG_ADMIN_TOKEN }}
           script: |
@@ -39,7 +39,7 @@ jobs:
             }
 
       - name: Add me to the organization
-        uses: actions/github-script@v3
+        uses: actions/github-script@v6
         with:
           github-token: ${{ secrets.ONEGHEORG_ADMIN_TOKEN }}
           script: |
