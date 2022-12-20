@@ -21,12 +21,29 @@ jobs:
           echo "Issue is not labeled with 'add-me', skipping"
           exit 0
 
+      # check if the user is already a member of the organization
+      # if they are, then mark the workflow as successful and exit
+
+      - name: Check if user is already a member
+        uses: actions/github-script@v3
+        with:
+          github-token: ${{ secrets.ONEGHEORG_ADMIN_TOKEN }}
+          script: |
+            const membership = await github.rest.orgs.getMembershipForUser({
+              org: context.repo.owner,
+              username: context.payload.issue.user.login
+            })
+            if (membership.status === 200) {
+              console.log('User is already a member of the organization')
+              exit(0)
+            }
+
       - name: Add me to the organization
         uses: actions/github-script@v3
         with:
           github-token: ${{ secrets.ONEGHEORG_ADMIN_TOKEN }}
           script: |
-            github.orgs.addOrUpdateMembershipForUser({
+            github.rest.orgs.addOrUpdateMembershipForUser({
               org: context.repo.owner,
               username: context.payload.issue.user.login,
               role: 'member'
