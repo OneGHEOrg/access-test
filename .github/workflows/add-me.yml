@@ -29,10 +29,19 @@ jobs:
         with:
           github-token: ${{ secrets.ONEGHEORG_ADMIN_TOKEN }}
           script: |
-            const membership = await github.rest.orgs.getMembershipForUser({
-              org: context.repo.owner,
-              username: context.payload.issue.user.login
-            })
+            try{
+              const membership = await github.rest.orgs.getMembershipForUser({
+                org: context.repo.owner,
+                username: context.payload.issue.user.login
+              })
+            } catch (error) {
+              if (error.status === 404) {
+                console.log('User is not a member of the organization')
+              } else {
+                throw error
+              }
+            }
+
             if (membership.status === 200) {
               console.log('User is already a member of the organization')
               core.setFailed('User is already a member of the organization')
