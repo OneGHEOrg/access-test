@@ -35,7 +35,7 @@ jobs:
             })
             if (membership.status === 200) {
               console.log('User is already a member of the organization')
-              exit(0)
+              core.fail('User is already a member of the organization')
             }
 
       - name: Add me to the organization
