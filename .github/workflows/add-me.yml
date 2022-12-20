@@ -52,9 +52,9 @@ jobs:
         with:
           github-token: ${{ secrets.ONEGHEORG_ADMIN_TOKEN }}
           script: |
-            github.rest.orgs.addOrUpdateMembershipForUser({
+            github.rest.orgs.createInvitation({
               org: context.repo.owner,
-              username: context.payload.issue.user.login,
-              role: 'member'
+              invitee_id: context.payload.issue.user.login,
+              role: 'direct_member'
             })
       
