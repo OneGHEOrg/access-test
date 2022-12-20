@@ -34,17 +34,17 @@ jobs:
                 org: context.repo.owner,
                 username: context.payload.issue.user.login
               })
+
+              if (membership.status === 200) {
+                console.log('User is already a member of the organization')
+                core.setFailed('User is already a member of the organization')
+              }
             } catch (error) {
               if (error.status === 404) {
                 console.log('User is not a member of the organization')
               } else {
                 throw error
               }
-            }
-
-            if (membership.status === 200) {
-              console.log('User is already a member of the organization')
-              core.setFailed('User is already a member of the organization')
             }
 
       - name: Add me to the organization
