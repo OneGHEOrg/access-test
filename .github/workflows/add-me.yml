@@ -30,9 +30,13 @@ jobs:
           github-token: ${{ secrets.ONEGHEORG_ADMIN_TOKEN }}
           script: |
             try{
+              // get the user ID for the user who created the issue
+              const user = await github.rest.users.getByUsername({
+                username: context.payload.issue.user.login
+              })
               const membership = await github.rest.orgs.getMembershipForUser({
                 org: context.repo.owner,
-                username: context.payload.issue.user.login
+                username: user.data.id
               })
 
               if (membership.status === 200) {
