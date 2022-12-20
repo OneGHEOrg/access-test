@@ -30,15 +30,10 @@ jobs:
           github-token: ${{ secrets.ONEGHEORG_ADMIN_TOKEN }}
           script: |
             try{
-              // get the user ID for the user who created the issue
-              const user = await github.rest.users.getByUsername({
-                username: context.payload.issue.user.login
-              })
-
               core.info(JSON.stringify(user, null, 2))
               const membership = await github.rest.orgs.getMembershipForUser({
                 org: context.repo.owner,
-                username: user.data.id
+                username: context.payload.issue.user.login
               })
 
               if (membership.status === 200) {
@@ -58,9 +53,13 @@ jobs:
         with:
           github-token: ${{ secrets.ONEGHEORG_ADMIN_TOKEN }}
           script: |
+            const user = await github.rest.users.getByUsername({
+              username: context.payload.issue.user.login
+            })
+            
             github.rest.orgs.createInvitation({
               org: context.repo.owner,
-              invitee_id: context.payload.issue.user.login,
+              invitee_id: user.data.id,
               role: 'direct_member'
             })
       
