@@ -1,5 +1,5 @@
-// create a github workflow that will run upon a new issue being lableled with "add-me"
-// the workflow should add the creator of the issue as a member of the organization
+# create a github workflow that will run upon a new issue being lableled with "add-me"
+# the workflow should add the creator of the issue as a member of the organization
 
 name: Add me to the organization
 
@@ -13,7 +13,7 @@ jobs:
   add-me:
     runs-on: ubuntu-latest
     steps:
-      // if the issue is not labeled with "add-me" then mark the workflow as successful and exit
+      # if the issue is not labeled with "add-me" then mark the workflow as successful and exit
 
       - name: Skip if not labeled
         if: ${{ !contains(github.event.issue.labels.*.name, 'add-me') }}
