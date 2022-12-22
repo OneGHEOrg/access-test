@@ -30,7 +30,6 @@ jobs:
           github-token: ${{ secrets.ONEGHEORG_ADMIN_TOKEN }}
           script: |
             try{
-              core.info(JSON.stringify(user, null, 2))
               const membership = await github.rest.orgs.getMembershipForUser({
                 org: context.repo.owner,
                 username: context.payload.issue.user.login
